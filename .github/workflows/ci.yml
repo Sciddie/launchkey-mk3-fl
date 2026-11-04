@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: [main, 'feat/**', 'fix/**']
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint (ruff)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install ruff
+      - run: ruff check --output-format=github .
+      - run: ruff format --check .
+
+  test:
+    name: Tests (Python ${{ matrix.python }})
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        # 3.9: FL Studio 20.9 - 21; 3.12: FL Studio 2024 / 2025.
+        python: ['3.9', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: pip install pytest
+      - name: Byte-compile the script folder (catches syntax FL's interpreter would reject)
+        run: python -m compileall -q src/LaunchkeyMK3Full
+      - run: pytest -v
+
+  package:
+    name: Package script folder
+    runs-on: ubuntu-24.04
+    needs: [lint, test]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Zip the folder that goes into Settings/Hardware
+        run: |
+          cd src
+          zip -r ../LaunchkeyMK3Full.zip LaunchkeyMK3Full -x '*/__pycache__/*'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: LaunchkeyMK3Full
+          path: LaunchkeyMK3Full.zip
