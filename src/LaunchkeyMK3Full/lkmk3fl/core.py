@@ -485,14 +485,15 @@ class CoreController:
         return top, self.transport_text()
 
     def transport_text(self):
-        flags = []
-        flags.append("PLAY" if host.is_playing() else "STOP")
+        """Compact transport state for the screen, e.g. "PLAY SONG", "REC PAT C" (C = metronome on)."""
         if host.is_recording():
-            flags.append("REC")
-        flags.append("SONG" if host.is_song_mode() else "PAT")
+            state = "REC" if host.is_playing() else "ARM"
+        else:
+            state = "PLAY" if host.is_playing() else "STOP"
+        text = state + (" SONG" if host.is_song_mode() else " PAT")
         if host.is_metronome_on():
-            flags.append("CLK")
-        return " ".join(flags)
+            text += " C"
+        return text
 
     def refresh_display(self):
         if not self.active:

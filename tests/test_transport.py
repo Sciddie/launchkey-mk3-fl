@@ -100,4 +100,4 @@ def test_transport_state_on_display(surface, fl):
     fl.recording = True
     fl.loop_mode = 1
     surface.refresh()
-    assert surface.lcd_rows()[1] == "PLAY REC SONG"
+    assert surface.lcd_rows()[1] == "S1-16 REC SONG"

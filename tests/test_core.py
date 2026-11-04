@@ -22,7 +22,7 @@ def test_welcome_message_then_default_display(make_surface, fl):
     s.script.OnInit()
     assert s.lcd_rows()[0] == "FL Studio"
     s.idle(3.0)
-    assert s.lcd_rows() == ["Master", "STOP PAT"]
+    assert s.lcd_rows() == ["Kick", "S1-16 STOP PAT"]
 
 
 def test_deinit_clears_leds_and_leaves_daw_mode(surface, fl):
@@ -88,7 +88,7 @@ def test_temporary_message_expires_back_to_default_rows(surface):
     surface.idle(0.5)
     assert surface.lcd_rows()[0] == "Metronome"
     surface.idle(2.0)
-    assert surface.lcd_rows() == ["Master", "STOP PAT CLK"]
+    assert surface.lcd_rows() == ["Kick", "S1-16 STOP PAT C"]
 
 
 def test_hint_bar_mirrors_messages(surface, fl):
