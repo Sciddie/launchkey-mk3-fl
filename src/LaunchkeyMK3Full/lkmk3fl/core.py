@@ -138,12 +138,14 @@ class CoreController:
 
     def on_event(self, e):
         kind = e.kind
+        if kind == "pot":
+            self.on_pot(e.index, e.value)
+            return True  # moving a value changes no LED: skip the LED pass on this busy path
+        if kind == "fader":
+            self.on_fader(e.index, e.value)
+            return True
         if kind == "button":
             self.on_button(e)
-        elif kind == "pot":
-            self.on_pot(e.index, e.value)
-        elif kind == "fader":
-            self.on_fader(e.index, e.value)
         elif kind == "pad_mode":
             self.on_pad_mode(e.value)
         elif kind == "pot_mode":
