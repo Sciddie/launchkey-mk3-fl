@@ -7,6 +7,32 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-04
+
+### Added
+
+- Pad layers in the Session layout, cycled with Scene Launch (LED shows the layer):
+  - Steps: step sequencer of the selected channel in its colour, beat grid, step pages, moving playhead;
+  - Patterns: select and create patterns in their colours, current one pulsing;
+  - Channels: select channels, Shift + pad mutes;
+  - Mixer: select / mute / solo the bank's tracks (for the 25 / 37 without faders).
+- Scene ▲ ▼ navigation per layer (channels, step pages, patterns, banks) with LEDs.
+- Drum layout feedback: FPC pad colours or the channel colour, held pads white; notes pass through to FL Studio.
+- Device mode: plugin parameters on the pots (and faders in Device fader mode), named parameters in pages of eight,
+  Track ◀ ▶ paging, soft takeover, names and values on the screen.
+- Device Select: tap opens the plugin window, hold turns the pads into a channel / effect-slot picker,
+  Shift + Device Select toggles the pots' Device mode. Device Lock pins the device.
+- README feature map of every control, configuration table, model notes and known limitations.
+
+### Changed
+
+- The screen's second row shows the pad page with a compact transport state (`S1-16 PLAY PAT C`).
+- Pot and fader moves no longer recompute every LED.
+
+### Fixed
+
+- A Device Select tap opens the plugin window regardless of when the keyboard reports its pad layout change.
+
 ## [0.1.0] - 2026-11-04
 
 ### Added
@@ -22,5 +48,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - LED feedback for fader buttons, Arm/Select, Stop/Solo/Mute and Track ◀ ▶; LCD rows, messages and pot / fader labels.
 - FL Studio API mock and pytest suite; CI with ruff and pytest on Python 3.9 and 3.12.
 
-[Unreleased]: https://github.com/Sciddie/launchkey-mk3-fl/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/Sciddie/launchkey-mk3-fl/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/Sciddie/launchkey-mk3-fl/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/Sciddie/launchkey-mk3-fl/releases/tag/v0.1.0
