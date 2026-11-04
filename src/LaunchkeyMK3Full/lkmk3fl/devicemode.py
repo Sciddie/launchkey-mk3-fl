@@ -173,12 +173,6 @@ class DeviceMixin:
         self.check_device_change()
         self.retarget()
 
-    def on_pad_mode(self, mode):
-        super().on_pad_mode(mode)
-        # the surface itself may switch to / from the Device Select layout while the button is held
-        if mode != p.PAD_DEVICE_SELECT and self.device_select_held:
-            self.device_select_held = False
-
     # ------------------------------------------------------------------------------------------------ pads
 
     def device_select_channels(self):
