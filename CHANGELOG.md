@@ -7,6 +7,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-11-05
+
+### Added
+
+- German user guide `docs/ANLEITUNG.md`, linked from the README.
+- `PLAYHEAD_SET_COLOUR`, `PLAYHEAD_SET_ALT_COLOUR` and `PLAYHEAD_EMPTY_COLOUR` in `config.py`.
+
+### Fixed
+
+- Steps pad layer: the playhead no longer hides whether the step under it is set. It is white over a set step
+  (yellow for white / grey channels) and blue over an empty step; set steps keep the channel colour, empty steps
+  stay off / dim-white beat grid. Grey channels' set steps are lit white so they differ from the beat grid.
+
 ## [0.2.0] - 2026-11-04
 
 ### Added
@@ -48,6 +61,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - LED feedback for fader buttons, Arm/Select, Stop/Solo/Mute and Track ◀ ▶; LCD rows, messages and pot / fader labels.
 - FL Studio API mock and pytest suite; CI with ruff and pytest on Python 3.9 and 3.12.
 
-[Unreleased]: https://github.com/Sciddie/launchkey-mk3-fl/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/Sciddie/launchkey-mk3-fl/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/Sciddie/launchkey-mk3-fl/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/Sciddie/launchkey-mk3-fl/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/Sciddie/launchkey-mk3-fl/releases/tag/v0.1.0

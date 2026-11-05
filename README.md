@@ -60,7 +60,7 @@ Then open *Options > MIDI settings* (F10). The Launchkey has two USB MIDI ports:
    play the selected channel from there.
 4. If FL Studio auto-assigned its built-in *Novation Launchkey MK3* script to the DAW port, replace it with this one.
 
-The screen greets you with `FL Studio / LK MK3 Full 0.2.0` and the Launchkey switches to DAW mode.
+The screen greets you with `FL Studio / LK MK3 Full 0.2.1` and the Launchkey switches to DAW mode.
 
 ## Feature map
 
