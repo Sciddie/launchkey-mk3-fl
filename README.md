@@ -14,7 +14,7 @@ soft takeover, mute / solo / arm / select on the fader buttons, and names and va
 *Deutsch, kurz:* Ordner `src/LaunchkeyMK3Full` nach `Dokumente/Image-Line/FL Studio/Settings/Hardware/` kopieren, in
 FL Studio unter *Optionen > MIDI-Einstellungen* den **DAW-Port** (Windows: `MIDIIN2`/`MIDIOUT2`) mit dem Controller-Typ
 **Novation Launchkey MK3 (Full)** und gleicher Port-Nummer für Ein- und Ausgang belegen, Easy Start am Keyboard
-ausschalten. Die Tabellen unten zeigen jede Taste.
+ausschalten. Die komplette deutsche Bedienungsanleitung steht in **[docs/ANLEITUNG.md](docs/ANLEITUNG.md)**.
 
 ## Contents
 

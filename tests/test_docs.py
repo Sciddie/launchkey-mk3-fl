@@ -54,3 +54,22 @@ def test_install_steps_cover_windows_and_macos():
     assert "MIDIIN2" in README and "MIDIOUT2" in README
     assert "Easy Start" in README
     assert "Novation Launchkey MK3 (Full)" in README
+
+
+def test_german_guide_exists_and_is_linked():
+    with open(os.path.join(ROOT, "docs", "ANLEITUNG.md"), encoding="utf-8") as f:
+        guide = f.read()
+    assert "docs/ANLEITUNG.md" in README
+    for word in (
+        "Easy Start",
+        "MIDIIN2",
+        "MIDIOUT2",
+        "Novation Launchkey MK3 (Full)",
+        "generic controller",
+        "Scene Launch",
+        "Device Lock",
+        "Stop/Solo/Mute",
+        "Capture MIDI",
+        "PLAYHEAD_EMPTY_COLOUR",
+    ):
+        assert word in guide, word
