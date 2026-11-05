@@ -150,9 +150,15 @@ Im **Device**-Pot-Modus steuern die Pots die Parameter des „Devices“. Das De
 
 - Es zählen nur Parameter mit Namen; je **8 pro Seite**. Sind auch die Fader im Device-Modus, hat eine Seite
   16 Parameter (Pots 1–8, Fader 9–16).
-- **Track ◀ / ▶:** vorherige / nächste Parameter-Seite (Display `Page 2/5`; die LEDs zeigen, ob es weitergeht).
+- Für **Vital** gibt es vorne zusätzlich fünf feste Seiten mit ausgewählten Parametern (siehe unten „Vital“); danach
+  folgen die normalen Seiten.
+- Gewechseltes Device: Das Display zeigt kurz Plugin-Name und Seite; jeder Pot muss den neuen Wert erst wieder
+  „abholen“ (Soft Takeover).
+- **Track ◀ / ▶:** vorherige / nächste Parameter-Seite (Display `Page 2/5`, bei Vital z. B. `2/11 Osc`; die LEDs
+  zeigen, ob es weitergeht).
   **Shift + Track ◀ / ▶** verschiebt weiterhin die Mixer-Bank.
-- Display: Zeile 1 = Plugin-Name, Zeile 2 = `Dev 2/5` (bzw. `Dev 2/5 LOCK`); beim Drehen Parametername und Wert.
+- Display: Zeile 1 = Plugin-Name, Zeile 2 = `Dev 2/5` (gesperrt: `Dev 2/5 LOCK`, Vital: `Dev 1/11 Macros`); beim
+  Drehen Parametername und Wert.
 
 | Taste | Funktion |
 |---|---|
