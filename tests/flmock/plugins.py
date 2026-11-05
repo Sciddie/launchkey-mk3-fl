@@ -13,7 +13,8 @@ def isValid(index, slotIndex=-1, useGlobalIndex=False):
 
 
 def getPluginName(index, slotIndex=-1, userName=False, useGlobalIndex=False):
-    return _p(index, slotIndex).name
+    p = _p(index, slotIndex)
+    return (p.user_name or p.name) if userName else p.name
 
 
 def getParamCount(index, slotIndex=-1, useGlobalIndex=False):

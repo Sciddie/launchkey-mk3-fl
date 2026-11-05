@@ -7,8 +7,9 @@ undo. Every call that changes something is also appended to ``calls`` so tests c
 
 
 class Plugin:
-    def __init__(self, name, params=None, pads=None):
+    def __init__(self, name, params=None, pads=None, user_name=None):
         self.name = name
+        self.user_name = user_name  # the name the user gave the plugin in FL Studio, if any
         # list of [name, value 0..1]
         self.params = [list(p) for p in (params or [])]
         # FPC: list of (note, colour)

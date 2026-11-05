@@ -7,12 +7,15 @@ Which plugin ("the device"):
 4. otherwise the selected channel's instrument.
 
 Parameters are paged in eights over the plugin's *named* parameters; Track < > turns pages while the pots are in
-Device mode. Device Select held turns the pads into a device picker (top row: channels, bottom row: the selected
-mixer track's effect slots); a short press opens / closes the device's window.
+Device mode. Plugins with a map in ``plugin_maps`` (e.g. Vital) first get curated, titled pages (pots 1-8 and faders
+1-8 each), followed by the generic pages.
+
+Device Select held turns the pads into a device picker (top row: channels, bottom row: the selected mixer track's
+effect slots); a short press opens / closes the device's window.
 """
 
+from lkmk3fl import config, host, plugin_maps
 from lkmk3fl import flconst as fl
-from lkmk3fl import host
 from lkmk3fl import palette as pal
 from lkmk3fl import protocol as p
 from lkmk3fl.controls import NoTarget, PluginParam
@@ -28,6 +31,7 @@ class DeviceMixin:
         self.picked = None
         self.param_pages = {}  # plugin -> page
         self.param_cache = {}  # plugin -> [(param index, name)]
+        self.curated_cache = {}  # plugin -> (map name, [plugin_maps.Page]) or None
         self.last_device = None
         self.device_select_held = False
         self.device_select_used = False
@@ -70,18 +74,69 @@ class DeviceMixin:
         except Exception:
             return "Device"
 
+    def curated(self, plugin):
+        """(map name, pages) when a plugin map applies to ``plugin`` (e.g. Vital), else None."""
+        if not config.CURATED_PLUGIN_PAGES:
+            return None
+        if plugin in self.curated_cache:
+            return self.curated_cache[plugin]
+        result = None
+        try:
+            m = plugin_maps.find_map(host.plugin_original_name(plugin), host.plugin_name(plugin))
+            if m is not None:
+                count = min(host.param_count(plugin), MAX_SCANNED_PARAMS)
+                names = [host.param_name(plugin, i) for i in range(count)]
+                pages = plugin_maps.resolve(m, names)
+                if pages:
+                    result = (m["name"], pages)
+        except Exception:
+            result = None
+        self.curated_cache[plugin] = result
+        return result
+
+    def generic_per_page(self):
+        # 8 parameters per page; with the faders in Device mode a page is 16 (pots 1-8, faders 9-16)
+        return 16 if (self.has_faders and self.fader_mode == p.FADER_DEVICE) else 8
+
+    def generic_page_count(self, plugin):
+        per_page = self.generic_per_page()
+        return (len(self.device_params(plugin)) + per_page - 1) // per_page
+
     def param_page_count(self, plugin):
-        per_page = 16 if (self.has_faders and self.fader_mode == p.FADER_DEVICE) else 8
-        return max(1, (len(self.device_params(plugin)) + per_page - 1) // per_page)
+        curated = self.curated(plugin)
+        extra = len(curated[1]) if curated else 0
+        return max(1, extra + self.generic_page_count(plugin))
+
+    def current_page(self, plugin):
+        return min(self.param_pages.get(plugin, 0), self.param_page_count(plugin) - 1)
+
+    def page_title(self, plugin):
+        """Name of a curated page ("Macros"), "" for generic pages."""
+        curated = self.curated(plugin)
+        page = self.current_page(plugin)
+        if curated and page < len(curated[1]):
+            return curated[1][page].name
+        return "Params" if curated else ""
 
     def device_target(self, slot):
         plugin = self.device()
         if plugin is None:
             return NoTarget("No device")
+        page = self.current_page(plugin)
+        curated = self.curated(plugin)
+        if curated:
+            pages = curated[1]
+            if page < len(pages):
+                entry = pages[page].slots[slot]
+                if entry is None:
+                    return NoTarget("-")
+                index, label = entry
+                return PluginParam(plugin, index, label)
+            page -= len(pages)
         params = self.device_params(plugin)
-        # 8 parameters per page; with the faders in Device mode a page is 16 (pots 1-8, faders 9-16)
-        per_page = 16 if (self.has_faders and self.fader_mode == p.FADER_DEVICE) else 8
-        page = min(self.param_pages.get(plugin, 0), self.param_page_count(plugin) - 1)
+        per_page = self.generic_per_page()
+        if slot >= per_page:  # faders outside a 16-parameter generic page (not in Device fader mode)
+            return NoTarget("-")
         i = page * per_page + slot
         if i >= len(params):
             return NoTarget("-")
@@ -99,7 +154,10 @@ class DeviceMixin:
         return False
 
     def page_text(self, plugin):
-        return "Page %d/%d" % (self.param_pages.get(plugin, 0) + 1, self.param_page_count(plugin))
+        """ "Page 2/5", or with a curated page "2/5 Osc"."""
+        number = "%d/%d" % (self.current_page(plugin) + 1, self.param_page_count(plugin))
+        title = self.page_title(plugin)
+        return (number + " " + title) if title else ("Page " + number)
 
     # ------------------------------------------------------------------------------------------------ buttons
 
@@ -256,7 +314,8 @@ class DeviceMixin:
             plugin = self.device()
             if plugin is not None:
                 top = self.device_name(plugin)
-                bottom = "Dev " + self.page_text(plugin)[5:] + (" LOCK" if self.locked else "")
+                text = self.page_text(plugin)
+                bottom = "Dev " + (text[5:] if text.startswith("Page ") else text) + (" LOCK" if self.locked else "")
             else:
                 top = "No device"
         return top, bottom
@@ -264,6 +323,7 @@ class DeviceMixin:
     def on_refresh(self, flags):
         if flags & (fl.HW_DIRTY_FOCUSED_WINDOW | fl.HW_DIRTY_REMOTE_LINKS | fl.HW_DIRTY_NAMES):
             self.param_cache.clear()  # plugin replaced or renamed parameters
+            self.curated_cache.clear()
         if self.active:
             self.check_device_change()
         super().on_refresh(flags)

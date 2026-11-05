@@ -406,6 +406,14 @@ def plugin_name(target):
         return plugins.getPluginName(target[0], target[1])
 
 
+def plugin_original_name(target):
+    """The plugin's own name (e.g. "Vital"), whatever the user renamed it to."""
+    try:
+        return plugins.getPluginName(target[0], target[1], False)
+    except TypeError:
+        return plugins.getPluginName(target[0], target[1])
+
+
 def param_count(target):
     return int(plugins.getParamCount(target[0], target[1]))
 

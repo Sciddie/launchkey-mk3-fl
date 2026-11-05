@@ -46,3 +46,7 @@ START_PAD_LAYER = "steps"
 
 # Mirror short status messages to FL Studio's hint bar as well.
 HINTS = True
+
+# Device mode: curated parameter pages for known plugins (see lkmk3fl/plugin_maps/, e.g. Vital). The plugin's
+# remaining named parameters follow as generic pages. False = generic pages only.
+CURATED_PLUGIN_PAGES = True
