@@ -2,7 +2,7 @@
 # FL Studio loads src/LaunchkeyMK3Full/ directly (see README).
 [project]
 name = "launchkey-mk3-fl"
-version = "0.0.0"
+version = "0.3.0"
 description = "Full FL Studio MIDI controller script for the Novation Launchkey MK3"
 requires-python = ">=3.9"
 license = { text = "MIT" }
@@ -22,8 +22,14 @@ select = ["E", "F", "W", "B", "I", "UP", "SIM", "N"]
 ignore = [
     "N802", # FL Studio callbacks are CamelCase (OnInit, OnMidiMsg, ...)
     "N999", # device_LaunchkeyMK3Full.py is the file name FL Studio requires
+    "UP031", # %-formatting is fine (and reads well for fixed-width LCD text)
+    "SIM105", # plain try/except instead of contextlib keeps FL Studio imports minimal
     "UP006", "UP007", "UP035", "UP045", # no typing syntax newer than 3.9
 ]
+
+[tool.ruff.lint.per-file-ignores]
+# The mock mirrors FL Studio's own (camelCase) function and argument names.
+"tests/flmock/*" = ["N802", "N803", "N815", "N816"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["lkmk3fl"]
