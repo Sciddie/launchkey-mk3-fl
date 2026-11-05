@@ -7,6 +7,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-11-05
+
+### Added
+
+- Curated Device-mode pages for **Vital**: Macros, Osc, Filter, Env and FX, each with eight parameters for the pots
+  and eight for the faders (fader mode Device), followed by the generic pages. The page name is shown on the screen.
+- Data-driven plugin maps (`lkmk3fl/plugin_maps/`): parameters are resolved by name at runtime (display name,
+  internal id, prefix), missing ones leave the control empty; more plugins can be added as modules.
+- `CURATED_PLUGIN_PAGES` option in `config.py`.
+- README and ANLEITUNG sections on Vital.
+
 ## [0.2.1] - 2026-11-05
 
 ### Added
@@ -61,7 +72,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - LED feedback for fader buttons, Arm/Select, Stop/Solo/Mute and Track ◀ ▶; LCD rows, messages and pot / fader labels.
 - FL Studio API mock and pytest suite; CI with ruff and pytest on Python 3.9 and 3.12.
 
-[Unreleased]: https://github.com/Sciddie/launchkey-mk3-fl/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/Sciddie/launchkey-mk3-fl/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/Sciddie/launchkey-mk3-fl/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/Sciddie/launchkey-mk3-fl/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/Sciddie/launchkey-mk3-fl/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/Sciddie/launchkey-mk3-fl/releases/tag/v0.1.0

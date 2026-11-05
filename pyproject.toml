@@ -2,7 +2,7 @@
 # FL Studio loads src/LaunchkeyMK3Full/ directly (see README).
 [project]
 name = "launchkey-mk3-fl"
-version = "0.2.1"
+version = "0.3.0"
 description = "Full FL Studio MIDI controller script for the Novation Launchkey MK3"
 requires-python = ">=3.9"
 license = { text = "MIT" }
