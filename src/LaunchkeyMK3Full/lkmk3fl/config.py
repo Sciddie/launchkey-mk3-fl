@@ -33,6 +33,13 @@ QUANTISE_START_ONLY = True
 
 # Show a moving playhead on the step-sequencer pads while FL Studio plays.
 STEP_PLAYHEAD = True
+# Playhead colours (Launchkey palette indices 0..127, see the colour chart in Novation's programmer's reference).
+# The playhead must show whether the step under it is set:
+# - over a SET step: bright white (3); if the channel colour itself is white / grey, PLAYHEAD_SET_ALT_COLOUR is used
+# - over an EMPTY step: mid blue (46), clearly different from the white playhead, the dim-white beat grid and "off"
+PLAYHEAD_SET_COLOUR = 3
+PLAYHEAD_SET_ALT_COLOUR = 13  # yellow
+PLAYHEAD_EMPTY_COLOUR = 46
 
 # Pad layer selected when the script starts: "steps", "patterns", "channels" or "mixer".
 START_PAD_LAYER = "steps"

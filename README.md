@@ -95,7 +95,7 @@ Every physical control of the Launchkey MK3 49. **Shift** is a modifier: hold it
 
 | Pad layer | Pads | Scene ▲ / ▼ | Shift + Scene ▲ / ▼ | Shift + pad |
 |---|---|---|---|---|
-| **Steps** (amber ►) | The selected channel's steps 1–16 of the current page: lit in the channel colour, beat grid dim white, playhead white | Previous / next channel | Previous / next step page | Jump to step page *n* |
+| **Steps** (amber ►) | The selected channel's steps 1–16 of the current page: set steps in the channel colour (white for grey channels), empty steps off with a dim-white beat grid; playhead **white over a set step** (yellow if the channel is white/grey), **blue over an empty step** | Previous / next channel | Previous / next step page | Jump to step page *n* |
 | **Patterns** (cyan ►) | Patterns of the page in their colours, current one pulsing, dim green = create a new pattern | Previous / next pattern | Previous / next page of 16 | — |
 | **Channels** (green ►) | Select channels of the page (channel colours, selected pulsing, muted dim red) | Previous / next page of 16 | Previous / next channel | Mute / unmute the channel |
 | **Mixer** (magenta ►) | Top row: select the bank's tracks; bottom row: mute (lit = audible) | Previous / next bank | Previous / next track | Bottom row: solo |
@@ -189,6 +189,7 @@ Edit `LaunchkeyMK3Full/lkmk3fl/config.py` in the installed folder, then *Update 
 | `CAPTURE_SECONDS` | `30` | Capture MIDI length |
 | `QUANTISE_START_ONLY` | `True` | What Quantise does without Shift |
 | `STEP_PLAYHEAD` | `True` | Moving playhead on the step pads |
+| `PLAYHEAD_SET_COLOUR`, `PLAYHEAD_SET_ALT_COLOUR`, `PLAYHEAD_EMPTY_COLOUR` | `3`, `13`, `46` | Playhead palette colours over a set step (white; yellow for white/grey channels) and over an empty step (blue) |
 | `START_PAD_LAYER` | `"steps"` | Pad layer on start |
 | `HINTS` | `True` | Mirror messages to FL Studio's hint bar |
 

@@ -256,18 +256,30 @@ class PadsMixin:
         if ch < 0:
             return [LedState(pal.OFF) for _ in range(PADS)]
         colour = pal.of_fl_colour(host.channel_colour(ch), pal.AMBER)
+        if pal.is_grey(colour):
+            colour = pal.WHITE  # grey channels (FL's default colour): keep set steps apart from the dim beat grid
         count = self.step_count()
         for i in range(PADS):
             step = self.step_page * PADS + i
             if step >= count:
                 out.append(LedState(pal.OFF))
             elif step == self.playhead:
-                out.append(LedState(pal.WHITE))
+                out.append(LedState(self.playhead_colour(host.step(ch, step), colour)))
             elif host.step(ch, step):
                 out.append(LedState(colour))
             else:
                 out.append(LedState(pal.DIM_WHITE if step % 4 == 0 else pal.OFF))
         return out
+
+    @staticmethod
+    def playhead_colour(is_set, channel_colour):
+        """Playhead over a set step vs. an empty one: two clearly different colours, never the plain step colours."""
+        if not is_set:
+            return config.PLAYHEAD_EMPTY_COLOUR & 0x7F
+        colour = config.PLAYHEAD_SET_COLOUR & 0x7F
+        if channel_colour == colour or (pal.is_grey(channel_colour) and pal.is_grey(colour)):
+            colour = config.PLAYHEAD_SET_ALT_COLOUR & 0x7F
+        return colour
 
     def current_step(self):
         """Step under the playhead in the current pattern, -1 when not playing (or in song mode)."""

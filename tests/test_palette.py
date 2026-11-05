@@ -34,3 +34,8 @@ def test_dimmed_stays_dark_and_in_hue_block():
 def test_rgb_of():
     assert palette.rgb_of(3) == 0xFFFFFF
     assert palette.rgb_of(128 + 3) == 0xFFFFFF
+
+
+def test_is_grey():
+    assert palette.is_grey(palette.WHITE) and palette.is_grey(palette.DIM_WHITE)
+    assert not palette.is_grey(palette.RED) and not palette.is_grey(46)

@@ -194,6 +194,14 @@ def nearest(rgb, first=1, last=127):
     return best_index
 
 
+GREYS = (1, 2, 3, 70, 71, 103, 112, 117, 118, 119)
+
+
+def is_grey(index):
+    """Whether a palette entry is white / grey (hard to tell apart from the white playhead)."""
+    return (index & 0x7F) in GREYS
+
+
 def dimmed(index):
     """A darker palette entry of the same hue (the first half of the palette has 4 brightness steps per hue)."""
     index &= 0x7F

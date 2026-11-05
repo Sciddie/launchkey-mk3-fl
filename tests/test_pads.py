@@ -72,17 +72,62 @@ def test_playhead_moves_while_playing(surface, fl):
     fl.playing = True
     fl.song_step = 2
     surface.idle(0.02)
-    assert surface.session_led(2) == (pal.WHITE, 0)
+    assert surface.session_led(2) == (46, 0)  # over an empty step: mid blue
     fl.song_step = 3
     surface.idle(0.02)
     assert surface.session_led(2) == (pal.OFF, 0)
-    assert surface.session_led(3) == (pal.WHITE, 0)
+    assert surface.session_led(3) == (46, 0)
     fl.song_step = 16  # wraps in a 16-step pattern
     surface.idle(0.02)
-    assert surface.session_led(0) == (pal.WHITE, 0)
+    assert surface.session_led(0) == (pal.WHITE, 0)  # over a set step: white
     fl.playing = False
     surface.idle(0.02)
     assert surface.session_led(0) == (kick_colour(fl), 0)
+
+
+def test_playhead_shows_whether_the_step_is_set(surface, fl):
+    fl.channels[0].grid[1] = {4}
+    fl.playing = True
+    colours = {}
+    for step in range(16):
+        fl.song_step = step
+        surface.idle(0.02)
+        colours[step] = surface.session_led(step)[0]
+    set_colour = colours[4]
+    assert set_colour == pal.WHITE
+    assert {colours[s] for s in range(16) if s != 4} == {46}
+    # the playhead colours differ from each other and from every non-playhead step colour
+    plain = {kick_colour(fl), pal.DIM_WHITE, pal.OFF}
+    assert set_colour != 46 and set_colour not in plain and 46 not in plain
+
+
+def test_playhead_set_colour_avoids_white_channels(surface, fl):
+    fl.channels[0].colour = 0xFFFFFF
+    fl.channels[0].grid[1] = {0, 1}
+    fl.playing = True
+    fl.song_step = 0
+    surface.idle(0.02)
+    assert surface.session_led(0) == (pal.YELLOW, 0)
+    assert surface.session_led(1) == (pal.WHITE, 0)
+
+
+def test_grey_channels_set_steps_differ_from_beat_grid(surface, fl):
+    fl.channels[0].colour = 0x5F7581  # FL Studio's default channel colour
+    fl.channels[0].grid[1] = {1}
+    surface.refresh()
+    assert surface.session_led(1) == (pal.WHITE, 0)
+    assert surface.session_led(0) == (pal.DIM_WHITE, 0)
+
+
+def test_playhead_colours_are_configurable(make_surface, fl):
+    s = make_surface(PLAYHEAD_SET_COLOUR=21, PLAYHEAD_EMPTY_COLOUR=9)
+    fl.channels[0].grid[1] = {0}
+    fl.playing = True
+    s.idle(0.02)
+    assert s.session_led(0) == (21, 0)
+    fl.song_step = 1
+    s.idle(0.02)
+    assert s.session_led(1) == (9, 0)
 
 
 def test_playhead_follows_pages(surface, fl):
@@ -91,7 +136,7 @@ def test_playhead_follows_pages(surface, fl):
     fl.song_step = 20
     surface.idle(0.02)
     assert surface.controller.step_page == 1
-    assert surface.session_led(4) == (pal.WHITE, 0)
+    assert surface.session_led(4) == (46, 0)
 
 
 def test_no_playhead_in_song_mode_or_when_disabled(make_surface, fl):
@@ -111,7 +156,7 @@ def test_beat_indicator_updates_playhead(surface, fl):
     fl.playing = True
     fl.song_step = 5
     surface.script.OnUpdateBeatIndicator(2)
-    assert surface.session_led(5) == (pal.WHITE, 0)
+    assert surface.session_led(5) == (46, 0)
 
 
 # --- layer switching ---------------------------------------------------------------------------------------------
