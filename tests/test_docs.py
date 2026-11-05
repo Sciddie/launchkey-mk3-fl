@@ -73,3 +73,10 @@ def test_german_guide_exists_and_is_linked():
         "PLAYHEAD_EMPTY_COLOUR",
     ):
         assert word in guide, word
+
+
+def test_vital_pages_documented():
+    from lkmk3fl.plugin_maps import vital
+
+    for page in vital.MAP["pages"]:
+        assert "**" + page["name"] + "**" in README

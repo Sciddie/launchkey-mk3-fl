@@ -60,7 +60,7 @@ Then open *Options > MIDI settings* (F10). The Launchkey has two USB MIDI ports:
    play the selected channel from there.
 4. If FL Studio auto-assigned its built-in *Novation Launchkey MK3* script to the DAW port, replace it with this one.
 
-The screen greets you with `FL Studio / LK MK3 Full 0.2.1` and the Launchkey switches to DAW mode.
+The screen greets you with `FL Studio / LK MK3 Full 0.3.0` and the Launchkey switches to DAW mode.
 
 ## Feature map
 
@@ -147,6 +147,26 @@ mixer effect) → the one **picked** with Device Select + pad → the **selected
 Pots 1–8 control its named parameters, eight per page; Track ◀ / ▶ turn pages (the screen shows `Page 2/5`). With
 the faders in Device mode, a page is 16 parameters: pots 1–8 and faders 9–16. Values change with soft takeover.
 
+### Vital
+
+When the device is **Vital** (Matt Tytel's synth; detected by the plugin name, also when you renamed it), Device mode
+starts with five curated pages; Track ◀ / ▶ step through them, then on through the generic pages of all named
+parameters. The screen shows the page (`Dev 1/11 Macros`) and the name / value of each control. Pots take the first
+column, faders (in fader mode **Device**, 49 / 61 / 88) the second:
+
+| Page | Pots 1–8 | Faders 1–8 (fader mode Device) |
+|---|---|---|
+| **Macros** | Macro 1, Macro 2, Macro 3, Macro 4, Filter 1 Cutoff, Filter 1 Resonance, Reverb Mix, Volume | Osc 1 / 2 / 3 Level, Sub Level, Sample Level, Delay Mix, Chorus Mix, Distortion Mix |
+| **Osc** | Osc 1 / 2 / 3 Wave Frame, Osc 1 / 2 / 3 Transpose, Osc 1 Unison Voices, Osc 1 Unison Detune | Osc 1 / 2 / 3 Level, Osc 1 / 2 / 3 Tune, Osc 2 / 3 Unison Detune |
+| **Filter** | Filter 1 Cutoff, Resonance, Drive, Mix; Filter 2 Cutoff, Resonance, Drive, Mix | Filter 1 / 2 Key Track, Filter 1 / 2 Blend, Distortion Drive, Distortion Mix, EQ Low Gain, EQ High Gain |
+| **Env** | Envelope 1 Attack, Decay, Sustain, Release; Envelope 2 Attack, Decay, Sustain, Release | Envelope 3 Attack, Decay, Sustain, Release; LFO 1 / 2 Frequency, Portamento (Glide), Velocity Track |
+| **FX** | Reverb Mix, Size, Decay; Delay Mix, Feedback; Chorus Mix; Phaser Mix; Flanger Mix | Compressor Mix, EQ Low / Band / High Gain, Delay Frequency, Chorus Voices, Distortion Drive, Distortion Mix |
+
+Parameters are found **by name** when the plugin is focused (Vital's display names, its internal ids as fallback), not
+by position, so a different parameter order does not break the mapping; a name that isn't found leaves its control
+empty (`-`). The table lives in `lkmk3fl/plugin_maps/vital.py` — add a module there to support another plugin the same
+way. `CURATED_PLUGIN_PAGES = False` in `config.py` turns it off.
+
 ### Soft takeover
 
 Pots and faders only take over a value once they reach it (within 3 steps, or by crossing it), so switching banks,
@@ -188,6 +208,7 @@ Edit `LaunchkeyMK3Full/lkmk3fl/config.py` in the installed folder, then *Update 
 | `MESSAGE_SECONDS` | `1.5` | How long messages stay on screen |
 | `CAPTURE_SECONDS` | `30` | Capture MIDI length |
 | `QUANTISE_START_ONLY` | `True` | What Quantise does without Shift |
+| `CURATED_PLUGIN_PAGES` | `True` | Curated Device-mode pages for known plugins (Vital) |
 | `STEP_PLAYHEAD` | `True` | Moving playhead on the step pads |
 | `PLAYHEAD_SET_COLOUR`, `PLAYHEAD_SET_ALT_COLOUR`, `PLAYHEAD_EMPTY_COLOUR` | `3`, `13`, `46` | Playhead palette colours over a set step (white; yellow for white/grey channels) and over an empty step (blue) |
 | `START_PAD_LAYER` | `"steps"` | Pad layer on start |
@@ -214,6 +235,8 @@ Edit `LaunchkeyMK3Full/lkmk3fl/config.py` in the installed folder, then *Update 
   button is held is unconfirmed; the script requests it explicitly and restores the previous layout on release.
 - **Send A / B** need MIDI scripting API 36 (FL Studio 21.2+); older versions show `no send`. Sends move existing
   routes only unless `SEND_CREATE_ROUTE` is on.
+- **Vital page names** come from Vital's source (display names of its parameters). How FL Studio's VST wrapper names
+  them in practice (full names, truncated names) is not verified on hardware yet; the prefix match covers truncation.
 - **Plugin parameters:** VST plugins in FL Studio's wrapper can expose thousands of parameters; the script pages
   through the first 4096 *named* ones. Some plugins don't provide value strings (the screen then shows a percentage).
 - **White-only LEDs** (Arm/Select, Device Select / Lock, Track and Scene arrows) are driven with the palette's white
@@ -250,6 +273,7 @@ src/LaunchkeyMK3Full/
     core.py       lifecycle, transport, mixer, soft takeover, LED / LCD output
     pads.py       pad layers and drum feedback
     devicemode.py plugin parameters, Device Select / Lock
+    plugin_maps/  curated Device-mode pages per plugin (vital.py)
     controls.py   control targets and soft takeover
     leds.py, display.py   cached LED / LCD output
     config.py     user options

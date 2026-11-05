@@ -1,6 +1,6 @@
 # Anleitung: Launchkey MK3 (Full) in FL Studio
 
-Kurzanleitung für das Skript **Novation Launchkey MK3 (Full)** (ab Version 0.2.1), geschrieben für das
+Kurzanleitung für das Skript **Novation Launchkey MK3 (Full)** (ab Version 0.3.0), geschrieben für das
 **Launchkey MK3 49**. Auf 61 / 88 gilt alles genauso; 25 / 37 haben keine Fader und Fader-Tasten (dafür gibt es die
 Mixer-Pad-Ebene).
 
@@ -19,7 +19,7 @@ Mixer-Pad-Ebene).
    - **Input** `LKMK3 MIDI` (die Tastatur): aktivieren als **(generic controller)**. Tasten, Räder, Sustain und
      Drum-Pads spielen dann den ausgewählten Kanal.
    - Falls FL Studio dem DAW-Port das eingebaute *Novation Launchkey MK3*-Skript zugewiesen hat: durch dieses ersetzen.
-4. Beim Start zeigt das Display `FL Studio` / `LK MK3 Full 0.2.1`.
+4. Beim Start zeigt das Display `FL Studio` / `LK MK3 Full 0.3.0`.
 
 ## 2. Transport und Bearbeiten
 
@@ -163,12 +163,30 @@ Im **Device**-Pot-Modus steuern die Pots die Parameter des „Devices“. Das De
 
 Die LED von **Device Select** ist hell, wenn es ein Device gibt.
 
+### Vital
+
+Ist das Device **Vital** (erkannt am Plugin-Namen, auch wenn du es umbenannt hast), beginnt der Device-Modus mit fünf
+festen Seiten. **Track ◀ / ▶** blättert durch diese Seiten und danach weiter durch die normalen Seiten mit allen
+benannten Parametern. Das Display zeigt die Seite (z. B. `Dev 1/11 Macros`, beim Blättern `2/11 Osc`) und beim Drehen
+Parametername und Wert. Die Pots steuern die erste Spalte, die Fader (nur im Fader-Modus **Device**) die zweite:
+
+| Seite | Pots 1–8 | Fader 1–8 (Fader-Modus Device) |
+|---|---|---|
+| **Macros** | Macro 1, Macro 2, Macro 3, Macro 4, Filter 1 Cutoff, Filter 1 Resonance, Reverb Mix, Volume | Osc 1 / 2 / 3 Level, Sub Level, Sample Level, Delay Mix, Chorus Mix, Distortion Mix |
+| **Osc** | Osc 1 / 2 / 3 Wave Frame, Osc 1 / 2 / 3 Transpose, Osc 1 Unison Voices, Osc 1 Unison Detune | Osc 1 / 2 / 3 Level, Osc 1 / 2 / 3 Tune, Osc 2 / 3 Unison Detune |
+| **Filter** | Filter 1 Cutoff, Resonance, Drive, Mix; Filter 2 Cutoff, Resonance, Drive, Mix | Filter 1 / 2 Key Track, Filter 1 / 2 Blend, Distortion Drive, Distortion Mix, EQ Low Gain, EQ High Gain |
+| **Env** | Hüllkurve 1 Attack, Decay, Sustain, Release; Hüllkurve 2 Attack, Decay, Sustain, Release | Hüllkurve 3 Attack, Decay, Sustain, Release; LFO 1 / 2 Frequency, Portamento (Glide), Velocity Track |
+| **FX** | Reverb Mix, Size, Decay; Delay Mix, Feedback; Chorus Mix; Phaser Mix; Flanger Mix | Compressor Mix, EQ Low / Band / High Gain, Delay Frequency, Chorus Voices, Distortion Drive, Distortion Mix |
+
+Die Parameter werden beim Fokussieren **über ihren Namen** gesucht, nicht über ihre Position. Wird ein Name nicht
+gefunden, bleibt der Regler leer (`-`). Abschalten: `CURATED_PLUGIN_PAGES = False` in `lkmk3fl/config.py`.
+
 ## 7. Display
 
 | Anzeige | Inhalt |
 |---|---|
 | Zeile 1 | Steps / Channels: ausgewählter Kanal · Patterns: aktuelles Pattern · Mixer: ausgewählte Mixer-Spur · Device-Modus: Plugin-Name |
-| Zeile 2 | Ebene + Seite und Transport, z. B. `S1-16 PLAY PAT C`: `S`/`P`/`C`/`M` = Steps/Patterns/Channels/Mixer, `PLAY`/`STOP`/`REC` (`ARM` = Aufnahme an, aber gestoppt), `PAT`/`SONG`, `C` = Metronom an |
+| Zeile 2 | Ebene + Seite und Transport (im Device-Modus `Dev 2/5` bzw. bei Vital `Dev 1/11 Macros`), z. B. `S1-16 PLAY PAT C`: `S`/`P`/`C`/`M` = Steps/Patterns/Channels/Mixer, `PLAY`/`STOP`/`REC` (`ARM` = Aufnahme an, aber gestoppt), `PAT`/`SONG`, `C` = Metronom an |
 | Pot-/Fader-Anzeige | Name und Wert des bewegten Reglers: Spurname mit dB / Pan (`L37`, `C`, `R12`) / Send-%, oder Parametername und -wert |
 | Meldungen | Ergebnis jedes Tastendrucks für 1,5 s |
 
@@ -182,4 +200,4 @@ ebenfalls beim Keyboard.
 
 In `LaunchkeyMK3Full/lkmk3fl/config.py` (danach *Update MIDI scripts* in den MIDI-Einstellungen): Modell erzwingen,
 Soft Takeover, Start-Modi, Send-Ziele, Anzeigedauer, Capture-Länge, Quantise-Variante, Abspielpositions-Farben,
-Start-Pad-Ebene, Hinweiszeile. Die Bedeutung jeder Option steht in der Datei und im README.
+Start-Pad-Ebene, Hinweiszeile, feste Plugin-Seiten (Vital). Die Bedeutung jeder Option steht in der Datei und im README.
